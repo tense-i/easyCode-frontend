@@ -68,9 +68,9 @@
           <span v-if="!loading">登 录</span>
           <span v-else>登 录 中...</span>
         </el-button>
-        <div class="register-link" v-if="register">
+        <div class="register-link">
           <router-link class="link-type" :to="'/register'"
-            >立即注册</router-link
+            >没有账号,立即注册</router-link
           >
         </div>
       </el-form-item>
@@ -95,7 +95,7 @@ const { proxy } = getCurrentInstance();
 
 const loginForm = ref({
   username: "admin",
-  password: "admin123",
+  password: "",
   rememberMe: false,
   code: "",
   uuid: "",
@@ -192,13 +192,26 @@ getCookie();
 </script>
 
 <style lang="scss" scoped>
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 .login {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
-  background-image: linear-gradient(135deg, #74b9ff, #a29bfe);
-  background-size: cover;
+  background: linear-gradient(270deg, #74b9ff, #a29bfe, #74b9ff);
+  background-size: 600% 600%;
+  animation: gradient 10s ease infinite;
 }
 
 .title {
