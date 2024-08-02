@@ -19,7 +19,10 @@
         <tags-view v-if="needTagsView" />
       </div>
       <app-main />
-      <settings ref="settingRef" />
+      <!-- 右侧面板 -->
+      <right-panel>
+        <settings ref="settingRef" />
+      </right-panel>
     </div>
   </div>
 </template>

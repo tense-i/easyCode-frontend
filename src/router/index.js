@@ -1,4 +1,4 @@
-import {createWebHistory, createRouter} from 'vue-router'
+import { createWebHistory, createRouter } from 'vue-router'
 /* Layout */
 import Layout from '@/layout'
 
@@ -66,7 +66,7 @@ export const constantRoutes = [
                 path: '/index',
                 component: () => import('@/views/index'),
                 name: 'Index',
-                meta: {title: '首页', icon: 'dashboard', affix: true}
+                meta: { title: '首页', icon: 'dashboard', affix: true }
             }
         ]
     },
@@ -80,7 +80,7 @@ export const constantRoutes = [
                 path: 'profile',
                 component: () => import('@/views/system/user/profile/index'),
                 name: 'Profile',
-                meta: {title: '个人中心', icon: 'user'}
+                meta: { title: '个人中心', icon: 'user' }
             }
         ]
     }
@@ -98,7 +98,7 @@ export const dynamicRoutes = [
                 path: 'role/:userId(\\d+)',
                 component: () => import('@/views/system/user/authRole'),
                 name: 'AuthRole',
-                meta: {title: '分配角色', activeMenu: '/system/user'}
+                meta: { title: '分配角色', activeMenu: '/system/user' }
             }
         ]
     },
@@ -112,7 +112,7 @@ export const dynamicRoutes = [
                 path: 'user/:roleId(\\d+)',
                 component: () => import('@/views/system/role/authUser'),
                 name: 'AuthUser',
-                meta: {title: '分配用户', activeMenu: '/system/role'}
+                meta: { title: '分配用户', activeMenu: '/system/role' }
             }
         ]
     },
@@ -126,7 +126,7 @@ export const dynamicRoutes = [
                 path: 'index/:dictId(\\d+)',
                 component: () => import('@/views/system/dict/data'),
                 name: 'Data',
-                meta: {title: '字典数据', activeMenu: '/system/dict'}
+                meta: { title: '字典数据', activeMenu: '/system/dict' }
             }
         ]
     },
@@ -140,7 +140,7 @@ export const dynamicRoutes = [
                 path: 'index/:jobId(\\d+)',
                 component: () => import('@/views/monitor/job/log'),
                 name: 'JobLog',
-                meta: {title: '调度日志', activeMenu: '/monitor/job'}
+                meta: { title: '调度日志', activeMenu: '/monitor/job' }
             }
         ]
     },
@@ -154,7 +154,7 @@ export const dynamicRoutes = [
                 path: 'index/:tableId(\\d+)',
                 component: () => import('@/views/tool/gen/editTable'),
                 name: 'GenEdit',
-                meta: {title: '修改生成配置', activeMenu: '/tool/gen'}
+                meta: { title: '修改生成配置', activeMenu: '/tool/gen' }
             }
         ]
     },
@@ -168,7 +168,7 @@ export const dynamicRoutes = [
                 path: 'index/:id(\\d+)',
                 component: () => import('@/views/tool/genConfig/genConfigEdit.vue'),
                 name: 'GenConfigEdit',
-                meta: {title: '修改生成配置', activeMenu: '/tool/dbDog'}
+                meta: { title: '修改生成配置', activeMenu: '/tool/dbDog' }
             }
         ]
     },
@@ -182,7 +182,7 @@ export const dynamicRoutes = [
                 path: 'index/:tableId(\\d+)',
                 component: () => import('@/views/tool/gentable/editTable.vue'),
                 name: 'GenTableEdit',
-                meta: {title: '修改生成表', activeMenu: '/tool/gentable'}
+                meta: { title: '修改生成表', activeMenu: '/tool/gentable' }
             }
         ]
     },
@@ -196,7 +196,7 @@ const router = createRouter({
         if (savedPosition) {
             return savedPosition
         } else {
-            return {top: 0}
+            return { top: 0 }
         }
     },
 });
