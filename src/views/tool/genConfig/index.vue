@@ -1,88 +1,89 @@
 <template>
-    <div class="app-container">
+  <div class="app-container">
+    <el-form
+      :model="queryParams"
+      ref="queryRef"
+      :inline="true"
+      v-show="showSearch"
+    >
+      <el-form-item label="配置名称" prop="name">
+        <el-input
+          v-model="queryParams.name"
+          placeholder="请输入配置名称"
+          clearable
+          style="width: 200px"
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="备注" prop="notes">
+        <el-input
+          v-model="queryParams.notes"
+          placeholder="请输入备注"
+          clearable
+          style="width: 200px"
+          @keyup.enter="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="创建时间" style="width: 308px">
+        <el-date-picker
+          v-model="dateRange"
+          value-format="YYYY-MM-DD"
+          type="daterange"
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        ></el-date-picker>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" icon="Search" @click="handleQuery"
+          >搜索</el-button
+        >
+        <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+      </el-form-item>
+    </el-form>
 
-        <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
-            <el-form-item label="配置名称" prop="name">
-                <el-input
-                        v-model="queryParams.name"
-                        placeholder="请输入配置名称"
-                        clearable
-                        style="width: 200px"
-                        @keyup.enter="handleQuery"
-                />
-            </el-form-item>
-            <el-form-item label="备注" prop="notes">
-                <el-input
-                        v-model="queryParams.notes"
-                        placeholder="请输入备注"
-                        clearable
-                        style="width: 200px"
-                        @keyup.enter="handleQuery"
-                />
-            </el-form-item>
-            <el-form-item label="创建时间" style="width: 308px">
-                <el-date-picker
-                        v-model="dateRange"
-                        value-format="YYYY-MM-DD"
-                        type="daterange"
-                        range-separator="-"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                ></el-date-picker>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-                <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-            </el-form-item>
-        </el-form>
+    <!--       功能按键-->
+    <el-row :gutter="10" class="mb8">
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          plain
+          icon="CopyDocument"
+          @click="handleCopy([])"
+          :disabled="cpoyDisabled"
+          >复制
+        </el-button>
+      </el-col>
 
-        <!--       功能按键-->
-        <el-row :gutter="10" class="mb8">
+      <el-col :span="1.5">
+        <el-button type="info" plain icon="Upload" @click="openImportTable"
+          >导入
+        </el-button>
+      </el-col>
 
-            <el-col :span="1.5">
-                <el-button
-                        type="primary"
-                        plain
-                        icon="CopyDocument"
-                        @click="handleCopy([])"
-                        :disabled="cpoyDisabled"
-                >复制
-                </el-button>
-            </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="success"
+          plain
+          icon="Edit"
+          :disabled="single"
+          @click="handleEditTable"
+          >修改
+        </el-button>
+      </el-col>
 
-            <el-col :span="1.5">
-                <el-button
-                        type="info"
-                        plain
-                        icon="Upload"
-                        @click="openImportTable"
-                >导入
-                </el-button>
-            </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="danger"
+          plain
+          icon="Delete"
+          :disabled="multiple"
+          @click="handleDelete([])"
+          >删除
+        </el-button>
+      </el-col>
 
-            <el-col :span="1.5">
-                <el-button
-                        type="success"
-                        plain
-                        icon="Edit"
-                        :disabled="single"
-                        @click="handleEditTable"
-                >修改
-                </el-button>
-            </el-col>
-
-            <el-col :span="1.5">
-                <el-button
-                        type="danger"
-                        plain
-                        icon="Delete"
-                        :disabled="multiple"
-                        @click="handleDelete([])"
-                >删除
-                </el-button>
-            </el-col>
-
-            <!--            <el-col :span="1.5">
+      <!--            <el-col :span="1.5">
                             <el-button
                                     type="primary"
                                     plain
@@ -93,72 +94,107 @@
                             </el-button>
                         </el-col>-->
 
-            <el-col :span="1.5">
-                <el-button
-                        type="primary"
-                        plain
-                        icon="Plus"
-                        @click="handleAddNew"
+      <el-col :span="1.5">
+        <el-button type="primary" plain icon="Plus" @click="handleAddNew"
+          >去创建
+        </el-button>
+      </el-col>
 
-                >去创建
-                </el-button>
-            </el-col>
+      <right-toolbar
+        v-model:showSearch="showSearch"
+        @queryTable="getList"
+      ></right-toolbar>
+    </el-row>
 
+    <el-table
+      v-loading="loading"
+      :data="genConfigs"
+      @selection-change="handleSelectionChange"
+    >
+      <el-table-column
+        type="selection"
+        align="center"
+        width="55"
+      ></el-table-column>
+      <el-table-column label="序号" type="index" width="50" align="center">
+        <template #default="scope">
+          <span>{{
+            (queryParams.pageNum - 1) * queryParams.pageSize + scope.$index + 1
+          }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="配置名"
+        align="center"
+        prop="name"
+        :show-overflow-tooltip="true"
+      />
+      <el-table-column
+        label="备注"
+        align="center"
+        prop="notes"
+        :show-overflow-tooltip="true"
+      />
+      <el-table-column
+        label="生成包路径"
+        align="center"
+        prop="packagePath"
+        :show-overflow-tooltip="true"
+      />
+      <el-table-column
+        label="生成模块名"
+        align="center"
+        prop="moduleName"
+        :show-overflow-tooltip="true"
+      />
+      <el-table-column
+        label="创建时间"
+        align="center"
+        prop="createTime"
+        width="160"
+      />
+      <el-table-column
+        label="更新时间"
+        align="center"
+        prop="updateTime"
+        width="160"
+      />
+      <el-table-column
+        label="操作"
+        align="center"
+        width="330"
+        class-name="small-padding fixed-width"
+      >
+        <template #default="scope">
+          <el-tooltip content="编辑" placement="top">
+            <el-button
+              link
+              type="primary"
+              icon="Edit"
+              @click="handleEditTable(scope.row)"
+            ></el-button>
+          </el-tooltip>
 
-            <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
-        </el-row>
+          <el-tooltip content="复制" placement="top">
+            <el-button
+              link
+              type="primary"
+              icon="CopyDocument"
+              @click="handleCopy([scope.row])"
+            ></el-button>
+          </el-tooltip>
 
-        <el-table v-loading="loading" :data="genConfigs" @selection-change="handleSelectionChange">
-            <el-table-column type="selection" align="center" width="55"></el-table-column>
-            <el-table-column label="序号" type="index" width="50" align="center">
-                <template #default="scope">
-                    <span>{{ (queryParams.pageNum - 1) * queryParams.pageSize + scope.$index + 1 }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column
-                    label="配置名"
-                    align="center"
-                    prop="name"
-                    :show-overflow-tooltip="true"
-            />
-            <el-table-column
-                    label="备注"
-                    align="center"
-                    prop="notes"
-                    :show-overflow-tooltip="true"
-            />
-            <el-table-column
-                    label="生成包路径"
-                    align="center"
-                    prop="packagePath"
-                    :show-overflow-tooltip="true"
-            />
-            <el-table-column
-                    label="生成模块名"
-                    align="center"
-                    prop="moduleName"
-                    :show-overflow-tooltip="true"
-            />
-            <el-table-column label="创建时间" align="center" prop="createTime" width="160"/>
-            <el-table-column label="更新时间" align="center" prop="updateTime" width="160"/>
-            <el-table-column label="操作" align="center" width="330" class-name="small-padding fixed-width">
-                <template #default="scope">
+          <el-tooltip content="删除" placement="top">
+            <el-button
+              link
+              type="primary"
+              icon="Delete"
+              @click="handleDelete([scope.row])"
+              v-hasPermi="['tool:gen:remove']"
+            ></el-button>
+          </el-tooltip>
 
-                    <el-tooltip content="编辑" placement="top">
-                        <el-button link type="primary" icon="Edit" @click="handleEditTable(scope.row)"></el-button>
-                    </el-tooltip>
-
-                    <el-tooltip content="复制" placement="top">
-                        <el-button link type="primary" icon="CopyDocument" @click="handleCopy([scope.row])"></el-button>
-                    </el-tooltip>
-
-                    <el-tooltip content="删除" placement="top">
-                        <el-button link type="primary" icon="Delete" @click="handleDelete([scope.row])"
-                                   v-hasPermi="['tool:gen:remove']"></el-button>
-                    </el-tooltip>
-
-
-                    <!--                    <el-tooltip content="预览" placement="top">
+          <!--                    <el-tooltip content="预览" placement="top">
                                             <el-button link type="primary" icon="View" @click="handlePreview(scope.row)"
                                                        v-hasPermi="['tool:gen:preview']"></el-button>
                                         </el-tooltip>
@@ -177,52 +213,75 @@
                                             <el-button link type="primary" icon="Download" @click="handleGenTable(scope.row)"
                                                        v-hasPermi="['tool:gen:code']"></el-button>
                                         </el-tooltip>-->
-                </template>
-            </el-table-column>
-        </el-table>
+        </template>
+      </el-table-column>
+    </el-table>
 
-        <pagination
-                v-show="total>0"
-                :total="total"
-                v-model:page="queryParams.pageNum"
-                v-model:limit="queryParams.pageSize"
-                @pagination="getList"
-        />
+    <pagination
+      v-show="total > 0"
+      :total="total"
+      v-model:page="queryParams.pageNum"
+      v-model:limit="queryParams.pageSize"
+      @pagination="getList"
+    />
 
-        <!-- 预览界面 -->
-        <el-dialog :title="preview.title" v-model="preview.open" width="80%" top="5vh" append-to-body class="scrollbar">
-            <el-tabs v-model="preview.activeName">
-                <el-tab-pane
-                        v-for="(value, key) in preview.data"
-                        :label="key.substring(key.lastIndexOf('/')+1,key.indexOf('.vm'))"
-                        :name="key.substring(key.lastIndexOf('/')+1,key.indexOf('.vm'))"
-                        :key="value"
-                >
-                    <el-link :underline="false" icon="DocumentCopy" v-copyText="value"
-                             v-copyText:callback="copyTextSuccess" style="float:right">&nbsp;复制
-                    </el-link>
-                    <pre>{{ value }}</pre>
-                </el-tab-pane>
-            </el-tabs>
-        </el-dialog>
+    <!-- 预览界面 -->
+    <el-dialog
+      :title="preview.title"
+      v-model="preview.open"
+      width="80%"
+      top="5vh"
+      append-to-body
+      class="scrollbar"
+    >
+      <el-tabs v-model="preview.activeName">
+        <el-tab-pane
+          v-for="(value, key) in preview.data"
+          :label="key.substring(key.lastIndexOf('/') + 1, key.indexOf('.vm'))"
+          :name="key.substring(key.lastIndexOf('/') + 1, key.indexOf('.vm'))"
+          :key="value"
+        >
+          <el-link
+            :underline="false"
+            icon="DocumentCopy"
+            v-copyText="value"
+            v-copyText:callback="copyTextSuccess"
+            style="float: right"
+            >&nbsp;复制
+          </el-link>
+          <pre>{{ value }}</pre>
+        </el-tab-pane>
+      </el-tabs>
+    </el-dialog>
 
-<!--        导入配置-->
-        <import-gen-config ref="importGenConfigRef"
-                           @import="handleCopy"
-                           :shared="{show:false,value:true}"/>
-    </div>
+    <!--        导入配置-->
+    <import-gen-config
+      ref="importGenConfigRef"
+      @import="handleCopy"
+      :shared="{ show: false, value: true }"
+    />
+  </div>
 </template>
 
 <script setup name="GenConfig">
-import {previewTable, delTable, genCode, synchDb, pageGenConfig} from "@/api/tool/gen";
+import {
+  previewTable,
+  delTable,
+  genCode,
+  synchDb,
+  pageGenConfig,
+} from "@/api/tool/gen";
 import router from "@/router";
-import {useRoute} from "vue-router";
-import {addNewGenConfig, copyGenConfig, deleteGenConfig} from "@/api/system/genConfig.js";
+import { useRoute } from "vue-router";
+import {
+  addNewGenConfig,
+  copyGenConfig,
+  deleteGenConfig,
+} from "@/api/system/genConfig.js";
 import ImportGenConfig from "@/components/DbDog/importGenConfig.vue";
 
-
 const route = useRoute();
-const {proxy} = getCurrentInstance();
+const { proxy } = getCurrentInstance();
 
 const tableList = ref([]);
 const loading = ref(true);
@@ -238,184 +297,190 @@ const uniqueId = ref("");
 const values = ref([]);
 
 const data = reactive({
-    queryParams: {
-        pageNum: 1,
-        pageSize: 10,
-        name: undefined,
-        notes: undefined
-    },
-    preview: {
-        open: false,
-        title: "代码预览",
-        data: {},
-        activeName: "domain.java"
-    },
-    genConfigs: []
+  queryParams: {
+    pageNum: 1,
+    pageSize: 10,
+    name: undefined,
+    notes: undefined,
+  },
+  preview: {
+    open: false,
+    title: "代码预览",
+    data: {},
+    activeName: "domain.java",
+  },
+  genConfigs: [],
 });
 
-const {queryParams, preview, genConfigs} = toRefs(data);
+const { queryParams, preview, genConfigs } = toRefs(data);
 
 onActivated(() => {
-    const time = route.query.t;
-    if (time != null && time != uniqueId.value) {
-        uniqueId.value = time;
-        queryParams.value.pageNum = Number(route.query.pageNum);
-        dateRange.value = [];
-        proxy.resetForm("queryForm");
-        getList();
-    }
-})
+  const time = route.query.t;
+  if (time != null && time != uniqueId.value) {
+    uniqueId.value = time;
+    queryParams.value.pageNum = Number(route.query.pageNum);
+    dateRange.value = [];
+    proxy.resetForm("queryForm");
+    getList();
+  }
+});
 
 /** 查询表集合 */
 function getList() {
-    loading.value = true;
-    pageGenConfig(proxy.addDateRange(queryParams.value, dateRange.value)).then(response => {
-        let resData;
-        console.log(response.data)
-        if (response.hasOwnProperty('data')) {
-            resData = response.data;
-        } else {
+  loading.value = true;
+  pageGenConfig(proxy.addDateRange(queryParams.value, dateRange.value)).then(
+    (response) => {
+      let resData;
+      console.log(response.data);
+      if (response.hasOwnProperty("data")) {
+        resData = response.data;
+      } else {
+        resData = response;
+      }
 
-            resData = response;
-        }
-
-        data.genConfigs = resData.records;
-        total.value = Number(resData.total);
-        loading.value = false;
-    });
+      data.genConfigs = resData.records;
+      total.value = Number(resData.total);
+      loading.value = false;
+    }
+  );
 }
 
 /** 搜索按钮操作 */
 function handleQuery() {
-    queryParams.value.pageNum = 1;
-    getList();
+  queryParams.value.pageNum = 1;
+  getList();
 }
 
 /** 生成代码操作 */
 function handleGenTable(row) {
-    const tbNames = row.tableName || tableNames.value;
-    if (tbNames == "") {
-        proxy.$modal.msgError("请选择要生成的数据");
-        return;
-    }
-    if (row.genType === "1") {
-        genCode(row.tableName).then(response => {
-            proxy.$modal.msgSuccess("成功生成到自定义路径：" + row.genPath);
-        });
-    } else {
-        proxy.$download.zip("/tool/gen/batchGenCode?tables=" + tbNames, "ruoyi.zip");
-    }
+  const tbNames = row.tableName || tableNames.value;
+  if (tbNames == "") {
+    proxy.$modal.msgError("请选择要生成的数据");
+    return;
+  }
+  if (row.genType === "1") {
+    genCode(row.tableName).then((response) => {
+      proxy.$modal.msgSuccess("成功生成到自定义路径：" + row.genPath);
+    });
+  } else {
+    proxy.$download.zip(
+      "/tool/gen/batchGenCode?tables=" + tbNames,
+      "ruoyi.zip"
+    );
+  }
 }
 
 /** 同步数据库操作 */
 function handleSynchDb(row) {
-    const tableName = row.tableName;
-    proxy.$modal.confirm('确认要强制同步"' + tableName + '"表结构吗？').then(function () {
-        return synchDb(tableName);
-    }).then(() => {
-        proxy.$modal.msgSuccess("同步成功");
-    }).catch(() => {
-    });
+  const tableName = row.tableName;
+  proxy.$modal
+    .confirm('确认要强制同步"' + tableName + '"表结构吗？')
+    .then(function () {
+      return synchDb(tableName);
+    })
+    .then(() => {
+      proxy.$modal.msgSuccess("同步成功");
+    })
+    .catch(() => {});
 }
 
 /** 打开导入表弹窗 */
 function openImportTable() {
-    debugger
-    proxy.$refs["importGenConfigRef"].show();
+  // debgger
+  proxy.$refs["importGenConfigRef"].show();
 }
 
 /** 重置按钮操作 */
 function resetQuery() {
-    dateRange.value = [];
-    proxy.resetForm("queryRef");
-    handleQuery();
+  dateRange.value = [];
+  proxy.resetForm("queryRef");
+  handleQuery();
 }
 
 /** 预览按钮 */
 function handlePreview(row) {
-    previewTable(row.tableId).then(response => {
-        preview.value.data = response.data;
-        preview.value.open = true;
-        preview.value.activeName = "domain.java";
-    });
+  previewTable(row.tableId).then((response) => {
+    preview.value.data = response.data;
+    preview.value.open = true;
+    preview.value.activeName = "domain.java";
+  });
 }
 
 /** 复制代码成功 */
 function copyTextSuccess() {
-    proxy.$modal.msgSuccess("复制成功");
+  proxy.$modal.msgSuccess("复制成功");
 }
 
 // 多选框选中数据
 function handleSelectionChange(selection) {
-    debugger
-    ids.value = selection.map(item => item.id);
-    values.value = selection.map(item => item);
-    tableNames.value = selection.map(item => item.tableName);
-    single.value = selection.length != 1;
-    multiple.value = !selection.length;
-    cpoyDisabled.value = !selection.length;
+  // debgger
+  ids.value = selection.map((item) => item.id);
+  values.value = selection.map((item) => item);
+  tableNames.value = selection.map((item) => item.tableName);
+  single.value = selection.length != 1;
+  multiple.value = !selection.length;
+  cpoyDisabled.value = !selection.length;
 }
-
 
 /** 修改按钮操作 */
 function handleEditTable(row) {
-    debugger
-    const id = row.id || ids.value[0];
-    router.push({
-        path: "/tool/gen-config-edit/index/" + id,
-        query: {
-            pageNum: 0
-        }
-    })
+  // debgger
+  const id = row.id || ids.value[0];
+  router.push({
+    path: "/tool/gen-config-edit/index/" + id,
+    query: {
+      pageNum: 0,
+    },
+  });
 }
 
 /** 去创建 */
 function handleAddNew() {
-
-    addNewGenConfig().then(res => {
-        if (res.code === 200) {
-            router.push({
-                path: "/tool/gen-config-edit/index/" + res.data.id,
-                query: {
-                    pageNum: 0
-                }
-            })
-        }
-    })
-
-
+  addNewGenConfig().then((res) => {
+    if (res.code === 200) {
+      router.push({
+        path: "/tool/gen-config-edit/index/" + res.data.id,
+        query: {
+          pageNum: 0,
+        },
+      });
+    }
+  });
 }
 
 /** 删除按钮操作 */
 function handleDelete(row) {
-    const copyValue = row.length != 0 ? row : values.value;
-    const names = copyValue.map(item => item.name);
-    const ids = copyValue.map(item => item.id);
-    proxy.$modal.confirm('是否确认删除选中配置项？').then(function () {
-        return deleteGenConfig(ids);
-    }).then(() => {
-        getList();
-        proxy.$modal.msgSuccess("删除成功");
-    }).catch(() => {
-    });
+  const copyValue = row.length != 0 ? row : values.value;
+  const names = copyValue.map((item) => item.name);
+  const ids = copyValue.map((item) => item.id);
+  proxy.$modal
+    .confirm("是否确认删除选中配置项？")
+    .then(function () {
+      return deleteGenConfig(ids);
+    })
+    .then(() => {
+      getList();
+      proxy.$modal.msgSuccess("删除成功");
+    })
+    .catch(() => {});
 }
-
 
 // 复制按钮操作
 function handleCopy(row) {
+  const copyValue = row.length != 0 ? row : values.value;
+  const names = copyValue.map((item) => item.name);
+  const ids = copyValue.map((item) => item.name);
 
-    const copyValue = row.length != 0 ? row : values.value;
-    const names = copyValue.map(item => item.name);
-    const ids = copyValue.map(item => item.name);
-
-    proxy.$modal.confirm('是否确认复制选中配置项？').then(function () {
-        return copyGenConfig(copyValue);
-    }).then(() => {
-        getList();
-        proxy.$modal.msgSuccess("复制成功");
-    }).catch(() => {
-    });
-
+  proxy.$modal
+    .confirm("是否确认复制选中配置项？")
+    .then(function () {
+      return copyGenConfig(copyValue);
+    })
+    .then(() => {
+      getList();
+      proxy.$modal.msgSuccess("复制成功");
+    })
+    .catch(() => {});
 }
 
 getList();

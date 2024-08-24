@@ -1,21 +1,24 @@
 <template>
-    <el-card>
-        <el-tabs v-model="activeName">
-            <el-tab-pane label="基本信息" name="basic">
-                <basic-info-form ref="basicInfo" :info="info"/>
-            </el-tab-pane>
-            <el-tab-pane label="字段信息" name="columnInfo">
-                <trends-table :columns="columns"
-                              :show-columns="showColumns"
-                              :index="true"
-                              :rowKeyName="'columnId'">
-                    <template v-slot:footer>
-                        <el-button class="mt-4" style="width: 100%" @click="onAddItem(null)">Add Item</el-button>
-                    </template>
-                </trends-table>
+  <el-card>
+    <el-tabs v-model="activeName">
+      <el-tab-pane label="基本信息" name="basic">
+        <basic-info-form ref="basicInfo" :info="info" />
+      </el-tab-pane>
+      <el-tab-pane label="字段信息" name="columnInfo">
+        <trends-table
+          :columns="columns"
+          :show-columns="showColumns"
+          :index="true"
+          :rowKeyName="'columnId'"
+        >
+          <template v-slot:footer>
+            <el-button class="mt-4" style="width: 100%" @click="onAddItem(null)"
+              >Add Item</el-button
+            >
+          </template>
+        </trends-table>
 
-
-<!--                <el-table ref="dragTable" :data="columns" row-key="columnId" :max-height="tableHeight">
+        <!--                <el-table ref="dragTable" :data="columns" row-key="columnId" :max-height="tableHeight">
                     <el-table-column label="序号" type="index" min-width="5%"/>
                     <el-table-column
                             label="字段列名"
@@ -124,31 +127,30 @@
                         </template>
                     </el-table-column>
                 </el-table>-->
-            </el-tab-pane>
-            <!--            <el-tab-pane label="生成信息" name="genInfo">-->
-            <!--                        <gen-info-form ref="genInfo" :info="info" :tables="tables" />-->
-            <!--            </el-tab-pane>-->
-        </el-tabs>
-        <el-form label-width="100px">
-            <div style="text-align: center;margin-left:-100px;margin-top:10px;">
-                <el-button type="primary" @click="submitForm()">提交</el-button>
-                <el-button @click="close()">返回</el-button>
-            </div>
-        </el-form>
-    </el-card>
+      </el-tab-pane>
+      <!--            <el-tab-pane label="生成信息" name="genInfo">-->
+      <!--                        <gen-info-form ref="genInfo" :info="info" :tables="tables" />-->
+      <!--            </el-tab-pane>-->
+    </el-tabs>
+    <el-form label-width="100px">
+      <div style="text-align: center; margin-left: -100px; margin-top: 10px">
+        <el-button type="primary" @click="submitForm()">提交</el-button>
+        <el-button @click="close()">返回</el-button>
+      </div>
+    </el-form>
+  </el-card>
 </template>
 
 <script setup name="GenEdit">
-import {getGenTable, updateGenTable} from "@/api/tool/gen";
-import {optionselect as getDictOptionselect} from "@/api/system/dict/type";
+import { getGenTable, updateGenTable } from "@/api/tool/gen";
+import { optionselect as getDictOptionselect } from "@/api/system/dict/type";
 import basicInfoForm from "./basicInfoForm";
 import genInfoForm from "./genInfoForm";
 import trendsTable from "@/components/DbDog/trendsTable.vue";
 import TrendsTable from "@/components/DbDog/trendsTable.vue";
 
-
 const route = useRoute();
-const {proxy} = getCurrentInstance();
+const { proxy } = getCurrentInstance();
 
 const activeName = ref("columnInfo");
 const tableHeight = ref(document.documentElement.scrollHeight - 245 + "px");
@@ -157,70 +159,64 @@ const columns = ref([]);
 const dictOptions = ref([]);
 const info = ref({});
 const showColumns = ref([
-    {
-        label: "字段列名",
-        type: "input",
-        key: "columnName"
+  {
+    label: "字段列名",
+    type: "input",
+    key: "columnName",
+  },
+  {
+    label: "字段描述",
+    type: "input",
+    key: "columnComment",
+  },
+  {
+    label: "物理类型",
+    type: "input",
+    key: "columnType",
+  },
+  {
+    label: "默认值",
+    type: "input",
+    key: "defaultValue",
+  },
+  {
+    label: "主键",
+    key: "isPk",
+    type: "check",
+    check: {
+      true: "1",
+      false: "0",
     },
-    {
-        label: "字段描述",
-        type: "input",
-        key: "columnComment"
+  },
+  {
+    label: "自增",
+    key: "isIncrement",
+    type: "check",
+    check: {
+      true: "1",
+      false: "0",
     },
-    {
-        label: "物理类型",
-        type: "input",
-        key: "columnType"
+  },
+  {
+    label: "必填",
+    key: "isRequired",
+    type: "check",
+    check: {
+      true: "1",
+      false: "0",
     },
-    {
-        label: "默认值",
-        type: "input",
-        key: "defaultValue"
-    },
-    {
-        label: "主键",
-        key: "isPk",
-        type: "check",
-        check: {
-            true: '1',
-            false: '0'
-        },
-
-    },
-    {
-        label: "自增",
-        key: "isIncrement",
-        type: "check",
-        check: {
-            true: '1',
-            false: '0'
-        },
-
-    },
-    {
-        label: "必填",
-        key: "isRequired",
-        type: "check",
-        check: {
-            true: '1',
-            false: '0'
-        },
-
-    },
-    {
-        label: "创建时间",
-        key: "createTime",
-        type: null,
-
-    },
-    {
-        label: "更新时间",
-        key: "updateTime",
-        type: null,
-
-    }
+  },
+  {
+    label: "创建时间",
+    key: "createTime",
+    type: null,
+  },
+  {
+    label: "更新时间",
+    key: "updateTime",
+    type: null,
+  },
 ]);
-
 
 /** 提交按钮 */
 // function submitForm() {
@@ -250,72 +246,74 @@ const showColumns = ref([
 // }
 
 function submitForm() {
-    const basicForm = proxy.$refs.basicInfo.$refs.basicInfoForm;
-    Promise.all([basicForm].map(getFormPromise)).then(res => {
-        const validateResult = res.every(item => !!item);
-        if (validateResult) {
-            const genTable = Object.assign({}, info.value);
-            genTable.columns = columns.value;
-            genTable.params = {
-                treeCode: info.value.treeCode,
-                treeName: info.value.treeName,
-                treeParentCode: info.value.treeParentCode,
-                parentMenuId: info.value.parentMenuId
-            };
-            updateGenTable(genTable).then(res => {
-                proxy.$modal.msgSuccess(res.msg);
-                if (res.code === 200) {
-                    close();
-                }
-            });
-        } else {
-            proxy.$modal.msgError("表单校验未通过，请重新检查提交内容");
+  const basicForm = proxy.$refs.basicInfo.$refs.basicInfoForm;
+  Promise.all([basicForm].map(getFormPromise)).then((res) => {
+    const validateResult = res.every((item) => !!item);
+    if (validateResult) {
+      const genTable = Object.assign({}, info.value);
+      genTable.columns = columns.value;
+      genTable.params = {
+        treeCode: info.value.treeCode,
+        treeName: info.value.treeName,
+        treeParentCode: info.value.treeParentCode,
+        parentMenuId: info.value.parentMenuId,
+      };
+      updateGenTable(genTable).then((res) => {
+        proxy.$modal.msgSuccess(res.msg);
+        if (res.code === 200) {
+          close();
         }
-    });
+      });
+    } else {
+      proxy.$modal.msgError("表单校验未通过，请重新检查提交内容");
+    }
+  });
 }
 function getFormPromise(form) {
-    return new Promise(resolve => {
-        form.validate(res => {
-            resolve(res);
-        });
+  return new Promise((resolve) => {
+    form.validate((res) => {
+      resolve(res);
     });
+  });
 }
 
 function close() {
-    const obj = {path: "/DBDog/gentable", query: {t: Date.now(), pageNum: route.query.pageNum}};
-    proxy.$tab.closeOpenPage(obj);
+  const obj = {
+    path: "/DBDog/gentable",
+    query: { t: Date.now(), pageNum: route.query.pageNum },
+  };
+  proxy.$tab.closeOpenPage(obj);
 }
 
 let newItem = 0;
 
 function onAddItem(row) {
-    debugger
-    let tempRow = row || {
-        columnId: null,
-        columnName: null,
-        columnComment: null,
-        columnType: null,
-        isPk: null,
-        isIncrement: null,
-        isRequired: null,
-        createTime: null,
-        updateTime: null,
-    }
+  // debgger
+  let tempRow = row || {
+    columnId: null,
+    columnName: null,
+    columnComment: null,
+    columnType: null,
+    isPk: null,
+    isIncrement: null,
+    isRequired: null,
+    createTime: null,
+    updateTime: null,
+  };
 
-    tempRow.columnId = (--newItem)
-    columns.value.push(tempRow)
+  tempRow.columnId = --newItem;
+  columns.value.push(tempRow);
 }
 
 (() => {
-    const tableId = route.params && route.params.tableId;
-    if (tableId) {
-        // 获取表详细信息
-        getGenTable(tableId).then(res => {
-            columns.value = res.data.rows;
-            info.value = res.data.info;
-            tables.value = res.data.tables;
-        });
-
-    }
+  const tableId = route.params && route.params.tableId;
+  if (tableId) {
+    // 获取表详细信息
+    getGenTable(tableId).then((res) => {
+      columns.value = res.data.rows;
+      info.value = res.data.info;
+      tables.value = res.data.tables;
+    });
+  }
 })();
 </script>

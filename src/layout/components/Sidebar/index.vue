@@ -11,8 +11,13 @@
     <logo v-if="showLogo" :collapse="isCollapse" />
     <el-scrollbar :class="sideTheme" wrap-class="scrollbar-wrapper">
       <el-menu
+        :unique-opened="false"
+        :active-text-color="theme"
+        :collapse-transition="false"
+        mode="vertical"
         :default-active="activeMenu"
         :collapse="isCollapse"
+        :default-openeds="['/tool', '/dbdog']"
         :background-color="
           sideTheme === 'theme-dark'
             ? variables.menuBackground
@@ -23,16 +28,13 @@
             ? variables.menuColor
             : variables.menuLightColor
         "
-        :unique-opened="false"
-        :active-text-color="theme"
-        :collapse-transition="false"
-        mode="vertical"
       >
         <sidebar-item
-          v-for="(route, index) in sidebarRouters"
-          :key="route.path + index"
+          v-for="(route, idx) in sidebarRouters"
+          :key="route.path + idx"
           :item="route"
           :base-path="route.path"
+          :index="route.path"
         />
       </el-menu>
     </el-scrollbar>

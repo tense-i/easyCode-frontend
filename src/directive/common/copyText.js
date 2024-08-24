@@ -22,7 +22,7 @@ export default {
 }
 
 function copyTextToClipboard(input, { target = document.body } = {}) {
-  debugger
+  // debgger
   const element = document.createElement('textarea');
   const previouslyFocusedElement = document.activeElement;
 
