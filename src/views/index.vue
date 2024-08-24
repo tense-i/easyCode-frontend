@@ -1,14 +1,14 @@
 <template>
   <el-container class="app-container home">
     <el-header class="header">
-      <h1 class="header-title">若依框架介绍</h1>
+      <h1 class="header-title">简码易框架介绍</h1>
     </el-header>
 
     <el-main class="main-content">
       <el-card class="intro-card" shadow="hover">
-        <h2>什么是若依框架？</h2>
+        <h2>什么是简码易框架？</h2>
         <p>
-          若依（RuoYi）框架是一套全部开源的快速开发平台，旨在帮助个人及企业快速构建现代化企业应用系统。框架对外完全免费，涵盖前后端的开发需求。
+          简码易（easyCode）框架是一套基于<a>RuoYi</a>、全部开源的快速开发平台，旨在帮助个人及企业快速构建现代化企业应用系统。框架对外完全免费，涵盖前后端的开发需求。
         </p>
         <p><strong>前端技术栈：</strong> Vue.js、Element Plus</p>
         <p>
@@ -23,16 +23,6 @@
           <strong>开发效率：</strong>
           高效开发，使用代码生成器可以一键生成前后端代码，提供技术栈（Vue3
           Element Plus Vite）版本 RuoYi-Vue3，保持同步更新。
-        </p>
-        <p>
-          <strong>版本支持：</strong> 提供单应用版本 RuoYi-Vue-fast，Oracle 版本
-          RuoYi-Vue-Oracle，微服务版本 RuoYi-Cloud。更多信息，请移步
-          [RuoYi](#)。
-        </p>
-        <p>
-          <strong>特别优惠：</strong>
-          <a href="#">阿里云折扣场</a> | <a href="#">腾讯云秒杀场</a><br />
-          <a href="#">阿里云优惠券</a> | <a href="#">腾讯云优惠券</a>
         </p>
       </el-card>
 
