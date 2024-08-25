@@ -13,6 +13,7 @@ onMounted(() => {
   });
 });
 
+// 悬浮AI客服
 window.ChatoBotConfig = {
   baseURL: "https://api.chato.cn",
   wwwBaseURL: "https://chato.cn",
