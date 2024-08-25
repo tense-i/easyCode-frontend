@@ -5,10 +5,17 @@
     </el-header>
 
     <el-main class="main-content">
+      <!-- 简码易框架介绍部分 -->
       <el-card class="intro-card" shadow="hover">
         <h2>什么是简码易框架？</h2>
         <p>
-          简码易（easyCode）框架是一套基于<a>RuoYi</a>、全部开源的快速开发平台，旨在帮助个人及企业快速构建现代化企业应用系统。框架对外完全免费，涵盖前后端的开发需求。
+          简码易（easyCode）框架是一套基于
+          RuoYi，全部开源的快速开发平台，旨在帮助个人及企业快速构建现代化企业应用系统。
+          简码易框架通过高度集成前后端技术栈，减少了开发中的繁琐配置与重复性代码编写，为开发者节省了大量时间。
+        </p>
+        <p>
+          <strong>核心价值：</strong>
+          简化开发过程，降低项目交付成本，并提供可扩展的企业级解决方案。
         </p>
         <p><strong>前端技术栈：</strong> Vue.js、Element Plus</p>
         <p>
@@ -21,89 +28,45 @@
         </p>
         <p>
           <strong>开发效率：</strong>
-          高效开发，使用代码生成器可以一键生成前后端代码，提供技术栈（Vue3
-          Element Plus Vite）版本 RuoYi-Vue3，保持同步更新。
+          使用代码生成器可以一键生成前后端代码，极大提高开发效率。
+        </p>
+        <p>
+          <strong>应用场景：</strong>
+          适用于各类企业级应用开发，如管理系统、数据报表系统、ERP、CRM等。
         </p>
       </el-card>
 
+      <!-- 效益数据展示部分 -->
       <el-card class="data-card" shadow="hover">
         <h2>效益数据展示</h2>
-        <el-row gutter="{20}">
-          <el-col :span="12">
+        <p>通过实际项目使用数据展示简码易框架带来的效益。</p>
+
+        <!-- 开发效率提升图表 -->
+        <el-row>
+          <el-col :span="24">
             <el-card class="chart-card">
-              <h3>工作效率提升</h3>
+              <h3>开发效率提升</h3>
               <canvas id="efficiencyChart"></canvas>
-            </el-card>
-          </el-col>
-          <el-col :span="12">
-            <el-card class="chart-card">
-              <h3>人力成本节省</h3>
-              <canvas id="costChart"></canvas>
+              <p class="chart-description">
+                通过对比传统开发模式与使用简码易框架后的开发效率，可以发现使用该框架能够显著减少开发时间，平均提升效率约
+                50%。
+              </p>
             </el-card>
           </el-col>
         </el-row>
-      </el-card>
 
-      <el-card class="features-card" shadow="hover">
-        <h2>内置功能</h2>
-        <el-collapse>
-          <el-collapse-item title="用户管理" name="1">
-            <p>用户管理：系统用户配置，操作人员管理。</p>
-          </el-collapse-item>
-          <el-collapse-item title="部门管理" name="2">
-            <p>
-              部门管理：配置系统组织机构（公司、部门、小组），支持数据权限。
-            </p>
-          </el-collapse-item>
-          <el-collapse-item title="岗位管理" name="3">
-            <p>岗位管理：配置系统用户所属职务。</p>
-          </el-collapse-item>
-          <el-collapse-item title="菜单管理" name="4">
-            <p>菜单管理：配置系统菜单、操作权限、按钮权限标识等。</p>
-          </el-collapse-item>
-          <el-collapse-item title="角色管理" name="5">
-            <p>角色管理：角色菜单权限分配、按机构划分数据范围权限。</p>
-          </el-collapse-item>
-          <el-collapse-item title="字典管理" name="6">
-            <p>字典管理：维护系统中经常使用的固定数据。</p>
-          </el-collapse-item>
-          <el-collapse-item title="参数管理" name="7">
-            <p>参数管理：动态配置常用参数。</p>
-          </el-collapse-item>
-          <el-collapse-item title="通知公告" name="8">
-            <p>通知公告：发布和维护系统通知公告信息。</p>
-          </el-collapse-item>
-          <el-collapse-item title="操作日志" name="9">
-            <p>操作日志：记录和查询系统操作日志，包含异常信息。</p>
-          </el-collapse-item>
-          <el-collapse-item title="登录日志" name="10">
-            <p>登录日志：记录和查询登录日志，包含登录异常。</p>
-          </el-collapse-item>
-          <el-collapse-item title="在线用户" name="11">
-            <p>在线用户：监控当前系统中活跃用户状态。</p>
-          </el-collapse-item>
-          <el-collapse-item title="定时任务" name="12">
-            <p>定时任务：任务调度（添加、修改、删除），包含执行结果日志。</p>
-          </el-collapse-item>
-          <el-collapse-item title="代码生成" name="13">
-            <p>代码生成：自动生成前后端代码，支持 CRUD 下载。</p>
-          </el-collapse-item>
-          <el-collapse-item title="系统接口" name="14">
-            <p>系统接口：自动生成 API 接口文档。</p>
-          </el-collapse-item>
-          <el-collapse-item title="服务监控" name="15">
-            <p>服务监控：监视系统 CPU、内存、磁盘等信息。</p>
-          </el-collapse-item>
-          <el-collapse-item title="缓存监控" name="16">
-            <p>缓存监控：查询系统缓存信息，统计命令等。</p>
-          </el-collapse-item>
-          <el-collapse-item title="在线构建器" name="17">
-            <p>在线构建器：拖动表单元素生成 HTML 代码。</p>
-          </el-collapse-item>
-          <el-collapse-item title="连接池监视" name="18">
-            <p>连接池监视：监视数据库连接池状态，分析 SQL，找出性能瓶颈。</p>
-          </el-collapse-item>
-        </el-collapse>
+        <!-- 项目交付时间缩短图表 -->
+        <el-row style="margin-top: 20px">
+          <el-col :span="24">
+            <el-card class="chart-card">
+              <h3>项目交付时间缩短</h3>
+              <canvas id="deliveryChart"></canvas>
+              <p class="chart-description">
+                简码易框架帮助团队更快地完成项目交付，尤其是在多人协作开发中，代码生成和规范化的架构设计起到了关键作用。
+              </p>
+            </el-card>
+          </el-col>
+        </el-row>
       </el-card>
     </el-main>
 
@@ -117,8 +80,9 @@
 import { ref, onMounted } from "vue";
 import Chart from "chart.js/auto";
 
+// 开发效率提升数据
 const efficiencyData = {
-  labels: ["GitHub Copilot", "若依框架", "综合效益"],
+  labels: ["EasyCodeAI", "简码易", "综合效益"],
   datasets: [
     {
       label: "工作效率提升",
@@ -138,22 +102,21 @@ const efficiencyData = {
   ],
 };
 
-const costData = {
-  labels: ["原始情况", "使用 Copilot", "使用 若依框架", "综合效益"],
+// 项目交付时间缩短数据
+const deliveryData = {
+  labels: ["原始时间", "使用 EasyCodeAI", "使用 简码易框架"],
   datasets: [
     {
-      label: "人力成本节省",
-      data: [100, 80, 60, 70],
+      label: "项目交付时间缩短",
+      data: [100, 80, 60, 50],
       backgroundColor: [
         "rgba(255, 99, 132, 0.6)",
         "rgba(54, 162, 235, 0.6)",
-        "rgba(255, 206, 86, 0.6)",
         "rgba(75, 192, 192, 0.6)",
       ],
       borderColor: [
         "rgba(255, 99, 132, 1)",
         "rgba(54, 162, 235, 1)",
-        "rgba(255, 206, 86, 1)",
         "rgba(75, 192, 192, 1)",
       ],
       borderWidth: 1,
@@ -161,6 +124,7 @@ const costData = {
   ],
 };
 
+// 挂载图表
 onMounted(() => {
   const efficiencyCtx = document
     .getElementById("efficiencyChart")
@@ -206,10 +170,10 @@ onMounted(() => {
     },
   });
 
-  const costCtx = document.getElementById("costChart").getContext("2d");
-  new Chart(costCtx, {
+  const deliveryCtx = document.getElementById("deliveryChart").getContext("2d");
+  new Chart(deliveryCtx, {
     type: "bar",
-    data: costData,
+    data: deliveryData,
     options: {
       responsive: true,
       plugins: {
@@ -229,14 +193,14 @@ onMounted(() => {
           beginAtZero: true,
           title: {
             display: true,
-            text: "情况",
+            text: "项目交付情况",
           },
         },
         y: {
           beginAtZero: true,
           title: {
             display: true,
-            text: "人力成本节省 (%)",
+            text: "交付时间缩短 (%)",
           },
           ticks: {
             callback: function (value) {
@@ -277,8 +241,7 @@ onMounted(() => {
 }
 
 .intro-card,
-.data-card,
-.features-card {
+.data-card {
   margin-bottom: 20px;
   background: #ffffff;
   border-radius: 8px;
@@ -286,26 +249,25 @@ onMounted(() => {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.intro-card h2,
-.features-card h2 {
+.intro-card h2 {
   color: #409eff;
   margin-bottom: 10px;
 }
 
-.intro-card p,
-.features-card p {
+.intro-card p {
   color: #606266;
   line-height: 1.6;
-}
-
-.features-card {
-  padding: 20px;
 }
 
 .chart-card {
   background-color: #ffffff;
   border-radius: 8px;
   padding: 20px;
+}
+
+.chart-description {
+  color: #606266;
+  margin-top: 10px;
 }
 
 .footer {

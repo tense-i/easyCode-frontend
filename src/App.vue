@@ -12,4 +12,17 @@ onMounted(() => {
     handleThemeStyle(useSettingsStore().theme);
   });
 });
+
+window.ChatoBotConfig = {
+  baseURL: "https://api.chato.cn",
+  wwwBaseURL: "https://chato.cn",
+  token: "10d8n7j9d365oyj6",
+  id: 23869,
+};
+var st = document.createElement("script");
+st.type = "module";
+st.async = true;
+st.src = "https://chato.cn/assets/iframe.min.js";
+var header = document.getElementsByTagName("head")[0];
+header.appendChild(st);
 </script>

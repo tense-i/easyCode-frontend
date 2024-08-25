@@ -36,6 +36,7 @@
           :base-path="route.path"
           :index="route.path"
         />
+      </el-menu>
     </el-scrollbar>
   </div>
 </template>
