@@ -36,6 +36,25 @@
           :base-path="route.path"
           :index="route.path"
         />
+
+        <el-sub-menu
+          ref="aiSubMenu"
+          index="/ai"
+          teleported
+          idx="/ai"
+          @click="toAIPage"
+        >
+          <!-- AI Page Title -->
+          <template #title>
+            <svg-icon :icon-class="f" />
+            <span class="menu-title" :title="EasyCode"> EasyCode </span>
+          </template>
+
+          <el-menu-item index="/ai/EasyCodeAI">
+            <svg-icon icon-class="ocr" />
+            <span class="menu-title"> EasyCodeAI </span>
+          </el-menu-item>
+        </el-sub-menu>
       </el-menu>
     </el-scrollbar>
   </div>
@@ -68,4 +87,6 @@ const activeMenu = computed(() => {
   }
   return path;
 });
+
+function toAIPage() {}
 </script>

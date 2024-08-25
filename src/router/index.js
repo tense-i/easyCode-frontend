@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from 'vue-router'
 /* Layout */
 import Layout from '@/layout'
+import AI from '@/views/easycode/index.vue'
 
 /**
  * Note: 路由配置项
@@ -186,7 +187,6 @@ export const dynamicRoutes = [
             }
         ]
     },
-
 ]
 
 const router = createRouter({
